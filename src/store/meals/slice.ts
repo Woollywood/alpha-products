@@ -1,15 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getMealsByCategory } from './actions';
 import { Store } from './types';
+import { MealPreview } from '@/api/MealsApi';
 
-const initialState: Store = { meals: [], isLoading: false };
+const initialState: Store = { meals: [], isLoading: true };
 
 export const slice = createSlice({
 	name: 'meals',
 	initialState,
-	reducers: {},
+	reducers: {
+		remove: (state, { payload: { idMeal } }: PayloadAction<Pick<MealPreview, 'idMeal'>>) => {
+			state.meals = state.meals.filter((meal) => meal.idMeal !== idMeal);
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addCase(getMealsByCategory.pending, (state) => {
+			state.meals = [];
 			state.isLoading = true;
 		});
 		builder.addCase(getMealsByCategory.fulfilled, (state, { payload: { meals } }) => {

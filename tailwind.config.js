@@ -7,6 +7,9 @@ export default {
 				center: true,
 				padding: '2rem',
 			},
+			colors: {
+				primary: 'rgb(var(--primary))',
+			},
 		},
 	},
 	plugins: [],

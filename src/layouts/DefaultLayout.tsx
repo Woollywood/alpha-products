@@ -5,7 +5,7 @@ import { Footer } from '@/components/shared/Footer';
 
 export const DefaultLayout: React.FC = () => {
 	return (
-		<div className='container grid min-h-screen grid-rows-[auto_1fr_auto]'>
+		<div className='container grid min-h-screen grid-rows-[auto_1fr_auto] gap-14'>
 			<Header />
 			<main>
 				<Outlet />

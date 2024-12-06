@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Store } from './types';
 import { getAllCategories } from './actions';
 
-const initialState: Store = { categories: [], isLoading: false };
+const initialState: Store = { categories: [], isLoading: true };
 
 export const slice = createSlice({
 	name: 'categories',

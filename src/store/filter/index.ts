@@ -1,6 +1,5 @@
 import { slice } from './slice';
 
 export const reducer = slice.reducer;
-export const { remove } = slice.actions;
-export * from './actions';
+export const { setCategory, setDisplay } = slice.actions;
 export * from './types';

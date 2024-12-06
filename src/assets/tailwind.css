@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--primary: 255 165 0;
+}
+
 @layer base {
 	body {
 		@apply overflow-x-hidden;
