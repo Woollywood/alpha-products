@@ -13,8 +13,14 @@ export const routes: RouteObject[] = [
 				HydrateFallback: () => null,
 			},
 			{
+				path: '/products',
+				lazy: () => import('@/pages/ProductsPage'),
+				HydrateFallback: () => null,
+			},
+			{
 				path: '*',
 				lazy: () => import('@/pages/NotFound'),
+				HydrateFallback: () => null,
 			},
 		],
 	},
