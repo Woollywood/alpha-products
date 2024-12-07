@@ -5,6 +5,7 @@ import { add, remove as removeFavorite } from '@/store/favorites';
 import { remove as removeMeal } from '@/store/meals';
 import { Button, Card as UCard } from 'antd';
 import { MealPreview } from '@/api/MealsApi';
+import { Link } from 'react-router';
 
 interface Props {
 	meal: MealPreview;
@@ -14,35 +15,46 @@ export const Card: React.FC<Props> = ({ meal }) => {
 	const dispatch = useAppDispatch();
 	const { favorites } = useAppSelector((state) => state.favorite);
 
+	const handleLike = (event: React.MouseEvent<HTMLElement, MouseEvent>, meal: MealPreview) => {
+		event.preventDefault();
+		dispatch(add(meal));
+	};
+
+	const handleRemove = (event: React.MouseEvent<HTMLElement, MouseEvent>, meal: MealPreview) => {
+		event.preventDefault();
+		dispatch(removeMeal({ idMeal: meal.idMeal }));
+	};
+
 	return (
-		<UCard
-			key={meal.idMeal}
-			hoverable
-			cover={<img alt='' src={meal.strMealThumb} />}
-			actions={[
-				favorites.find((favorite) => favorite.idMeal === meal.idMeal) ? (
-					<Button
-						size='large'
-						icon={<HeartSolidIcon />}
-						onClick={() => dispatch(removeFavorite({ idMeal: meal.idMeal }))}></Button>
-				) : (
-					<Button size='large' icon={<HeartRegularIcon />} onClick={() => dispatch(add(meal))}></Button>
-				),
-				<Button
-					size='large'
-					icon={<TrashIcon />}
-					onClick={() => dispatch(removeMeal({ idMeal: meal.idMeal }))}
-				/>,
-			]}>
-			<UCard.Meta
-				title={meal.strMeal}
-				description={
-					<p className='line-clamp-3'>
-						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum eos aut in debitis ipsam
-						voluptate iure deleniti recusandae libero sequi?
-					</p>
-				}
-			/>
-		</UCard>
+		<Link to={`/products/${meal.idMeal}`}>
+			<UCard
+				key={meal.idMeal}
+				hoverable
+				cover={<img alt='' src={meal.strMealThumb} />}
+				actions={[
+					favorites.find((favorite) => favorite.idMeal === meal.idMeal) ? (
+						<Button
+							size='large'
+							icon={<HeartSolidIcon />}
+							onClick={() => dispatch(removeFavorite({ idMeal: meal.idMeal }))}></Button>
+					) : (
+						<Button
+							size='large'
+							icon={<HeartRegularIcon />}
+							onClick={(event) => handleLike(event, meal)}></Button>
+					),
+					<Button size='large' icon={<TrashIcon />} onClick={(event) => handleRemove(event, meal)} />,
+				]}>
+				<UCard.Meta
+					title={meal.strMeal}
+					description={
+						<p className='line-clamp-3'>
+							Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum eos aut in debitis ipsam
+							voluptate iure deleniti recusandae libero sequi?
+						</p>
+					}
+				/>
+			</UCard>
+		</Link>
 	);
 };
