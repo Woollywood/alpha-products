@@ -10,7 +10,7 @@ import { reset } from '@/store/favorites';
 export const Component: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { selectedCategory } = useAppSelector((state) => state.filter);
-	const { isLoading } = useAppSelector((state) => state.meal);
+	const { isLoading } = useAppSelector((state) => state.meals);
 
 	const hasSelectedCategory = selectedCategory.length > 0;
 

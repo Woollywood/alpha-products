@@ -12,6 +12,7 @@ export const slice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getAllCategories.pending, (state) => {
+			state.categories = [];
 			state.isLoading = true;
 		});
 		builder.addCase(getAllCategories.fulfilled, (state, { payload: { categories } }) => {

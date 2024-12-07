@@ -90,4 +90,18 @@ export class MealsApi {
 
 		return data;
 	}
+
+	static async getMealById({ idMeal }: Pick<Meal, 'idMeal'>) {
+		const {
+			data: { meals },
+		} = await AxiosInstance<Meals<Meal>>({
+			method: 'get',
+			url: 'lookup.php',
+			params: {
+				i: idMeal,
+			},
+		});
+
+		return meals[0];
+	}
 }

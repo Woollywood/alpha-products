@@ -3,13 +3,15 @@ import { reducer as mealsReducer } from './meals';
 import { reducer as categoriesReducer } from './categories';
 import { reducer as favoritesReducer } from './favorites';
 import { reducer as filterReducer } from './filter';
+import { reducer as mealReducer } from './meal';
 
 export const store = configureStore({
 	reducer: {
-		meal: mealsReducer,
+		meals: mealsReducer,
 		category: categoriesReducer,
 		favorite: favoritesReducer,
 		filter: filterReducer,
+		meal: mealReducer,
 	},
 });
 

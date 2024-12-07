@@ -4,7 +4,7 @@ import { Card } from './Card';
 
 export const CardList: React.FC = () => {
 	const { selectedDisplay } = useAppSelector((state) => state.filter);
-	const { meals } = useAppSelector((state) => state.meal);
+	const { meals } = useAppSelector((state) => state.meals);
 	const { favorites } = useAppSelector((state) => state.favorite);
 
 	return (
