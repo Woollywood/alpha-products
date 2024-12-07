@@ -4,7 +4,7 @@ import React from 'react';
 
 export const CardLoader: React.FC = () => {
 	return (
-		<div className='grid grid-cols-4 gap-4'>
+		<div className='products-grid'>
 			{new Array(16).fill(null).map((_, index) => (
 				<Card
 					key={index}

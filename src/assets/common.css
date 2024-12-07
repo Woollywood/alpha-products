@@ -1,0 +1,3 @@
+.products-grid {
+	@apply grid grid-cols-4 items-start gap-4;
+}
