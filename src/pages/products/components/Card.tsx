@@ -28,6 +28,16 @@ export const Card: React.FC<Props> = ({ meal }) => {
 		});
 	};
 
+	const handleRemoveLike = (event: React.MouseEvent<HTMLElement, MouseEvent>, meal: MealPreview) => {
+		event.preventDefault();
+		dispatch(removeFavorite({ idMeal: meal.idMeal }));
+
+		messageApi.open({
+			type: 'success',
+			content: 'Removed from favorites',
+		});
+	};
+
 	const handleRemove = (event: React.MouseEvent<HTMLElement, MouseEvent>, meal: MealPreview) => {
 		event.preventDefault();
 		dispatch(removeMeal({ idMeal: meal.idMeal }));
@@ -49,7 +59,7 @@ export const Card: React.FC<Props> = ({ meal }) => {
 						<Button
 							size='large'
 							icon={<HeartSolidIcon />}
-							onClick={() => dispatch(removeFavorite({ idMeal: meal.idMeal }))}></Button>
+							onClick={(event) => handleRemoveLike(event, meal)}></Button>
 					) : (
 						<Button
 							size='large'
