@@ -3,14 +3,12 @@ import { AsideField } from './AsideField';
 import { setCategory, setDisplay } from '@/store/filter';
 import { Aside as UAside } from '@/components/ui/Aside';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { useGetCategories } from '@/hooks/categories';
 
 export const Aside: React.FC = () => {
 	const dispatch = useAppDispatch();
 
 	const { selectedCategory, selectedDisplay } = useAppSelector((state) => state.filter);
 	const { categories } = useAppSelector((state) => state.category);
-	useGetCategories();
 
 	const { isLoading } = useAppSelector((state) => state.category);
 	useLayoutEffect(() => {
