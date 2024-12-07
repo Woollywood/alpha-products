@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/store';
-import { getMealsByCategory } from '@/store/meals';
+import { getMealsByCategory, reset } from '@/store/meals';
 import { useEffect } from 'react';
 
 export const useGetMeals = (category: string) => {
@@ -9,5 +9,9 @@ export const useGetMeals = (category: string) => {
 		if (category.length > 0) {
 			dispatch(getMealsByCategory({ categoryParam: category }));
 		}
+
+		return () => {
+			dispatch(reset());
+		};
 	}, [category, dispatch]);
 };

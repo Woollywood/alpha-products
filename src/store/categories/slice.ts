@@ -7,7 +7,9 @@ const initialState: Store = { categories: [], isLoading: true };
 export const slice = createSlice({
 	name: 'categories',
 	initialState,
-	reducers: {},
+	reducers: {
+		reset: () => initialState,
+	},
 	extraReducers: (builder) => {
 		builder.addCase(getAllCategories.pending, (state) => {
 			state.isLoading = true;

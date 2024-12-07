@@ -14,5 +14,6 @@ export const slice = createSlice({
 		remove: (state, { payload: { idMeal } }: PayloadAction<Pick<MealPreview, 'idMeal'>>) => {
 			state.favorites = state.favorites.filter((favorite) => favorite.idMeal !== idMeal);
 		},
+		reset: () => initialState,
 	},
 });

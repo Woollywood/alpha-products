@@ -12,6 +12,7 @@ export const slice = createSlice({
 		remove: (state, { payload: { idMeal } }: PayloadAction<Pick<MealPreview, 'idMeal'>>) => {
 			state.meals = state.meals.filter((meal) => meal.idMeal !== idMeal);
 		},
+		reset: () => initialState,
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getMealsByCategory.pending, (state) => {

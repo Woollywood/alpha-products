@@ -13,5 +13,6 @@ export const slice = createSlice({
 		setDisplay: (state, { payload }: PayloadAction<string>) => {
 			state.selectedDisplay = payload;
 		},
+		reset: () => initialState,
 	},
 });
