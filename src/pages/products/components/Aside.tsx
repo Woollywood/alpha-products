@@ -1,4 +1,5 @@
 import React, { useLayoutEffect } from 'react';
+import { Skeleton } from 'antd';
 import { AsideField } from './AsideField';
 import { setCategory, setDisplay } from '@/store/filter';
 import { Aside as UAside } from '@/components/ui/Aside';
@@ -18,10 +19,10 @@ export const Aside: React.FC = () => {
 	}, [categories, dispatch]);
 
 	return isLoading ? (
-		<p>Loading...</p>
+		<Skeleton className='h-[70vh] w-[var(--sidebar-width)]' />
 	) : (
 		<UAside>
-			<div className='space-y-12'>
+			<div className='w-[var(--sidebar-width)] space-y-12'>
 				<AsideField
 					title='Category'
 					options={categories.map((category) => ({

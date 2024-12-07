@@ -4,6 +4,8 @@
 
 :root {
 	--primary: 255 165 0;
+
+	--sidebar-width: 8rem;
 }
 
 @layer base {
