@@ -27,7 +27,7 @@ export const Aside: React.FC = () => {
 				<AsideField
 					title='Category'
 					options={categories.map((category) => ({
-						value: category.idCategory,
+						value: category.strCategory,
 						label: category.strCategory,
 					}))}
 					selected={selectedCategory}
