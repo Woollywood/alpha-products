@@ -6,23 +6,36 @@ import { remove as removeMeal } from '@/store/meals';
 import { Button, Card as UCard } from 'antd';
 import { MealPreview } from '@/api/MealsApi';
 import { Link } from 'react-router';
+import { useMessage } from '@/libs/messages';
 
 interface Props {
 	meal: MealPreview;
 }
 
 export const Card: React.FC<Props> = ({ meal }) => {
+	const messageApi = useMessage();
+
 	const dispatch = useAppDispatch();
 	const { favorites } = useAppSelector((state) => state.favorite);
 
 	const handleLike = (event: React.MouseEvent<HTMLElement, MouseEvent>, meal: MealPreview) => {
 		event.preventDefault();
 		dispatch(add(meal));
+
+		messageApi.open({
+			type: 'success',
+			content: 'Added to favorites',
+		});
 	};
 
 	const handleRemove = (event: React.MouseEvent<HTMLElement, MouseEvent>, meal: MealPreview) => {
 		event.preventDefault();
 		dispatch(removeMeal({ idMeal: meal.idMeal }));
+
+		messageApi.open({
+			type: 'success',
+			content: 'Removed product',
+		});
 	};
 
 	return (
