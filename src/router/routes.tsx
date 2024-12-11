@@ -1,5 +1,5 @@
 import { RouteObject } from 'react-router';
-import { ErrorPage } from '@/pages/ErrorPage';
+import { ErrorPage } from '@/pages/error';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 
 export const routes: RouteObject[] = [
@@ -9,17 +9,17 @@ export const routes: RouteObject[] = [
 		children: [
 			{
 				index: true,
-				lazy: () => import('@/pages/HomePage'),
+				lazy: () => import('@/pages'),
 				HydrateFallback: () => null,
 			},
 			{
 				path: '/products',
-				lazy: () => import('@/pages/ProductsPage'),
+				lazy: () => import('@/pages/products'),
 				HydrateFallback: () => null,
 			},
 			{
 				path: '*',
-				lazy: () => import('@/pages/NotFound'),
+				lazy: () => import('@/pages/404'),
 				HydrateFallback: () => null,
 			},
 		],
