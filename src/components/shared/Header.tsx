@@ -93,8 +93,8 @@ export const Header: React.FC = () => {
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
-			<AppBar position='static'>
-				<Toolbar>
+			<AppBar position='fixed' className='h-[var(--header-height)]'>
+				<Toolbar className='h-full'>
 					<Link to='/'>
 						<Typography variant='h6' noWrap component='div'>
 							Logo
