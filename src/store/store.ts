@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { reducer as mealsReducer } from './meals';
-import { reducer as categoriesReducer } from './categories';
+import { reducer as productsReducer } from './products';
 
 export const store = configureStore({
 	reducer: {
-		meal: mealsReducer,
-		category: categoriesReducer,
+		products: productsReducer,
 	},
 });
 
