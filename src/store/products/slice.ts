@@ -48,6 +48,10 @@ export const slice = createSlice({
 
 			state.skip = state.skip! + LIMIT;
 			state.hasNextPage = state.skip <= state.total!;
+
+			if (state.skip > state.total!) {
+				state.skip = state.total;
+			}
 		});
 		builder.addCase(nextProducts.rejected, (state) => {
 			state.isNextPageLoading = false;
@@ -59,6 +63,8 @@ export const slice = createSlice({
 			state.isCreating = false;
 			state.products = [...state.products!, payload];
 			state.total = state.total! + 1;
+
+			state.hasNextPage = true;
 		});
 		builder.addCase(addProduct.rejected, (state) => {
 			state.isCreating = false;
