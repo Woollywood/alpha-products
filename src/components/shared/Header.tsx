@@ -55,7 +55,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 	},
 }));
 
-const pages: { label: string; to: string }[] = [{ label: 'Products', to: '/products' }];
+const pages: { label: string; to: string }[] = [
+	{ label: 'Products', to: '/products' },
+	{ label: 'Add', to: '/create-product' },
+];
 
 export const Header: React.FC = () => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

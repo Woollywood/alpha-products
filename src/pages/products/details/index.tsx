@@ -7,25 +7,34 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { getProductById } from '@/store/product';
+import { getProductById, set } from '@/store/product';
 import { InfoBlock } from './components/InfoBlock';
 import { Loader } from './components/Loader';
+import { Product } from '@/api/ProductsApi';
 
 export const Component: React.FC = () => {
+	const { products } = useAppSelector((state) => state.products);
 	const { isLoading, product } = useAppSelector((state) => state.product);
 	const dispatch = useAppDispatch();
 	const params = useParams();
 	const id = Number(params['id']);
 
 	useEffect(() => {
-		dispatch(getProductById({ id }));
+		const getProduct = async () => {
+			try {
+				await dispatch(getProductById({ id }));
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			} catch (error) {
+				dispatch(set(products?.find((product) => product.id === id) || ({} as Product)));
+			}
+		};
+
+		getProduct();
 	}, [dispatch, id]);
 
 	const hasDiscount = product?.discountPercentage;
 	const discount = hasDiscount && Number(((product.discountPercentage / 100) * product.price).toFixed(2));
 	const price = hasDiscount ? product.price - discount! : product?.price;
-
-	const hasTags = product?.tags && product?.tags.length > 0;
 
 	const hasReviews = product?.reviews && product.reviews.length > 0;
 
@@ -50,7 +59,7 @@ export const Component: React.FC = () => {
 								</p>
 								<div className='mb-6 flex items-center gap-2'>
 									<Rating value={product?.rating} readOnly />
-									{product?.reviews.length} reviews
+									{hasReviews && <span>{product?.reviews?.length} reviews</span>}
 								</div>
 								<div className='flex flex-col items-start gap-4'>
 									<InfoBlock>
@@ -60,31 +69,12 @@ export const Component: React.FC = () => {
 									<InfoBlock>
 										<h3 className='text-lg'>Category: {product?.category}</h3>
 									</InfoBlock>
-									<InfoBlock>
-										<p className='text-lg'>
-											depth: {product?.dimensions.depth}, height: {product?.dimensions.height},
-											width: {product?.dimensions.width}
-										</p>
-									</InfoBlock>
-									<InfoBlock>
-										<p className='text-lg'>
-											depth: {product?.dimensions.depth}, height: {product?.dimensions.height},
-											width: {product?.dimensions.width}
-										</p>
-									</InfoBlock>
-									{hasTags && (
-										<InfoBlock className='flex flex-wrap items-center gap-2'>
-											{product.tags.map((tag) => (
-												<span key={tag}>#{tag}</span>
-											))}
-										</InfoBlock>
-									)}
 								</div>
 							</div>
 							<div className='col-span-2'>
 								{hasReviews ? (
 									<ul className='space-y-6'>
-										{product.reviews.map(
+										{product?.reviews?.map(
 											({ comment, date, rating, reviewerEmail, reviewerName }, index) => (
 												<li key={index} className='flex gap-4'>
 													<Avatar>{reviewerName.slice(0, 1)}</Avatar>
@@ -125,8 +115,7 @@ export const Component: React.FC = () => {
 								{hasDiscount && (
 									<p className='mt-1 text-2xl font-medium text-green-500'>becames cheaper</p>
 								)}
-								<img className='my-4' src={product?.meta.qrCode} alt='' />
-								<div>
+								<div className='mt-12'>
 									<div className='flex items-start gap-2'>
 										<div className='flex-grow'>
 											<Button variant='contained' className='w-full' size='large'>

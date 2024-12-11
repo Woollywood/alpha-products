@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { InitialState } from './types';
-import { getProducts, nextProducts } from './actions';
+import { getProducts, nextProducts, addProduct } from './actions';
 
 const initialState: InitialState = {
 	isLoading: true,
@@ -8,6 +8,7 @@ const initialState: InitialState = {
 	hasNextPage: true,
 	products: null,
 	renderedProducts: null,
+	isCreating: false,
 };
 
 const LIMIT = 32;
@@ -50,6 +51,17 @@ export const slice = createSlice({
 		});
 		builder.addCase(nextProducts.rejected, (state) => {
 			state.isNextPageLoading = false;
+		});
+		builder.addCase(addProduct.pending, (state) => {
+			state.isCreating = true;
+		});
+		builder.addCase(addProduct.fulfilled, (state, { payload }) => {
+			state.isCreating = false;
+			state.products = [...state.products!, payload];
+			state.total = state.total! + 1;
+		});
+		builder.addCase(addProduct.rejected, (state) => {
+			state.isCreating = false;
 		});
 	},
 });

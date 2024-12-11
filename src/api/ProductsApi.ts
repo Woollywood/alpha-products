@@ -11,9 +11,6 @@ export interface Review {
 
 export interface ProductMeta {
 	createdAt: string;
-	updatedAt: string;
-	barcode: string;
-	qrCode: string;
 }
 
 export interface Product {
@@ -24,20 +21,10 @@ export interface Product {
 	price: number;
 	discountPercentage: number;
 	rating: number;
-	stock: number;
-	tags: string[];
 	brand: string;
-	sku: string;
-	weight: number;
-	dimensions: Record<string, number>;
-	warrantyInformation: string;
 	shippingInformation: string;
-	availabilityStatus: string;
-	reviews: Review[];
-	returnPolicy: string;
-	minimumOrderQuantity: number;
+	reviews: Review[] | null;
 	meta: ProductMeta;
-	images: string[];
 	thumbnail: string;
 }
 
@@ -68,8 +55,11 @@ export class ProductsApi {
 		return data;
 	}
 
-	static async addProduct(product: Product) {
+	static async addProduct(product: Omit<Product, 'id' | 'reviews'>) {
 		const { data } = await AxiosInstance<Product>({ method: 'post', url: 'add', data: product });
+		data.meta = {
+			createdAt: product.meta.createdAt,
+		};
 
 		return data;
 	}
@@ -82,9 +72,7 @@ export class ProductsApi {
 				| 'title'
 				| 'price'
 				| 'discountPercentage'
-				| 'stock'
 				| 'rating'
-				| 'images'
 				| 'thumbnail'
 				| 'description'
 				| 'brand'
