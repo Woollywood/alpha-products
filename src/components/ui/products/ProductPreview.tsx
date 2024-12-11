@@ -14,7 +14,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export const ProductPreview: React.FC<Product> = (product) => {
 	return (
-		<Card sx={{ maxWidth: 345 }} className='grid'>
+		<Card sx={{ maxWidth: 345 }} className='grid h-full'>
 			<CardHeader
 				action={
 					<IconButton aria-label='settings'>
