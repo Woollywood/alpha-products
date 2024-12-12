@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { Link } from 'react-router';
 import { GridLoader } from './components/GridLoader';
 import { AsideLoader } from './components/AsideLoader';
 import { useAppSelector } from '@/store';
@@ -9,14 +9,13 @@ import { InfiniteList } from '@/components/shared/InfiniteList';
 import { Filters } from './components/Filters';
 import { Product } from '@/api/ProductsApi';
 import { useGetProducts } from '@/hooks/products';
+import { useGetFilters } from '@/hooks/filters';
 
 export const Component: React.FC = () => {
 	const { isLoading, products, favorites } = useAppSelector((state) => state.products);
 
-	const [searchParams] = useSearchParams();
-	const display = searchParams.get('display');
-	const search = searchParams.get('s') || '';
-
+	const filters = useGetFilters();
+	const { display, search } = filters;
 	const filter = (product: Product) => product.title.toLowerCase().includes(search?.toLowerCase());
 	const filteredProducts = (display === 'all' ? products?.filter(filter) : favorites.filter(filter)) || [];
 
@@ -38,7 +37,7 @@ export const Component: React.FC = () => {
 					</div>
 				) : (
 					<InfiniteList
-						key={display}
+						key={JSON.stringify(filters)}
 						items={filteredProducts}
 						limit={32}
 						className='products-grid'
