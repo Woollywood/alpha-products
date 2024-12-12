@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import moment from 'moment';
 import Rating from '@mui/material/Rating';
@@ -7,30 +7,36 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { getProductById, set } from '@/store/product';
 import { InfoBlock } from './components/InfoBlock';
 import { Loader } from './components/Loader';
+import { delay } from '@/utils';
 import { Product } from '@/api/ProductsApi';
+import { useGetProducts } from '@/hooks/products';
 
 export const Component: React.FC = () => {
-	const { products } = useAppSelector((state) => state.products);
-	const { isLoading, product } = useAppSelector((state) => state.product);
+	useGetProducts();
+
+	const [isLoading, setLoading] = useState(true);
+	const [product, setProduct] = useState<Product | null>(null);
+
+	const { isLoading: isLoadingProducts, products } = useAppSelector((state) => state.products);
 	const dispatch = useAppDispatch();
+
 	const params = useParams();
 	const id = Number(params['id']);
 
 	useEffect(() => {
 		const getProduct = async () => {
-			try {
-				await dispatch(getProductById({ id }));
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			} catch (error) {
-				dispatch(set(products?.find((product) => product.id === id) || ({} as Product)));
-			}
+			await delay(1000);
+			const product = products?.find((product) => product.id === id);
+			setProduct(product!);
+			setLoading(false);
 		};
 
-		getProduct();
-	}, [dispatch, id]);
+		if (!isLoadingProducts) {
+			getProduct();
+		}
+	}, [dispatch, id, isLoadingProducts]);
 
 	const hasDiscount = product?.discountPercentage;
 	const discount = hasDiscount && Number(((product.discountPercentage / 100) * product.price).toFixed(2));
