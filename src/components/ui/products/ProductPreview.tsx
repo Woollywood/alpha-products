@@ -10,9 +10,11 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { HeartRegularIcon, HeartSolidIcon, TrashIcon } from '../icons';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { addFavorite, removeFavorite } from '@/store/products';
+import { addFavorite, removeFavorite, removeProduct } from '@/store/products';
 
 export const ProductPreview: React.FC<Product> = (product) => {
+	const { id } = product;
+
 	const dispatch = useAppDispatch();
 	const { favorites } = useAppSelector((state) => state.products);
 	const isInFavorites = Boolean(favorites.find((p) => p.id === product.id));
@@ -31,7 +33,12 @@ export const ProductPreview: React.FC<Product> = (product) => {
 	};
 
 	const handleRemoveFavorite = () => {
-		dispatch(removeFavorite({ id: product.id }));
+		dispatch(removeFavorite({ id }));
+	};
+
+	const handleRemove = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		event.preventDefault();
+		dispatch(removeProduct({ id }));
 	};
 
 	return (
@@ -47,7 +54,7 @@ export const ProductPreview: React.FC<Product> = (product) => {
 				<IconButton aria-label='add to favorites' onClick={toggleFavorite}>
 					{isInFavorites ? <HeartSolidIcon /> : <HeartRegularIcon />}
 				</IconButton>
-				<IconButton aria-label='delete'>
+				<IconButton aria-label='delete' onClick={handleRemove}>
 					<TrashIcon />
 				</IconButton>
 			</CardActions>

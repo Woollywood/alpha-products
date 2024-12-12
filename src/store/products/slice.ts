@@ -20,6 +20,12 @@ export const slice = createSlice({
 		removeFavorite: (state, { payload: { id } }: PayloadAction<Pick<Product, 'id'>>) => {
 			state.favorites = state.favorites.filter((product) => product.id !== id);
 		},
+		removeProduct: (state, { payload: { id } }: PayloadAction<Pick<Product, 'id'>>) => {
+			if (state.products) {
+				state.products = state.products?.filter((product) => product.id !== id);
+				state.favorites = state.favorites.filter((product) => product.id !== id);
+			}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getProducts.pending, (state) => {
