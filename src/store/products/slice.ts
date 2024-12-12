@@ -1,17 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { InitialState } from './types';
 import { getProducts, addProduct } from './actions';
+import { Product } from '@/api/ProductsApi';
 
 const initialState: InitialState = {
 	isLoading: true,
 	products: null,
+	favorites: [],
 	isCreating: false,
 };
 
 export const slice = createSlice({
 	name: 'products',
 	initialState,
-	reducers: {},
+	reducers: {
+		addFavorite: (state, { payload }: PayloadAction<Product>) => {
+			state.favorites.push(payload);
+		},
+		removeFavorite: (state, { payload: { id } }: PayloadAction<Pick<Product, 'id'>>) => {
+			state.favorites = state.favorites.filter((product) => product.id !== id);
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addCase(getProducts.pending, (state) => {
 			state.isLoading = true;

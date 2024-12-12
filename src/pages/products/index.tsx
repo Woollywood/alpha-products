@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Link } from 'react-router';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+import { Link, useSearchParams } from 'react-router';
 import { PaginationParams } from '@/api/types';
 import { GridLoader } from './components/GridLoader';
 import { AsideLoader } from './components/AsideLoader';
@@ -10,15 +8,14 @@ import { ProductPreview } from '@/components/ui/products/ProductPreview';
 import { getProducts } from '@/store/products';
 import { Aside } from '@/components/ui/Aside';
 import { InfiniteList } from '@/components/shared/InfiniteList';
-
-const displayOptions: { label: string; value: string }[] = [
-	{ label: 'All', value: 'all' },
-	{ label: 'Favorites', value: 'favorites' },
-];
+import { Filters } from './components/Filters';
 
 export const Component: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { isLoading, products } = useAppSelector((state) => state.products);
+	const { isLoading, products, favorites } = useAppSelector((state) => state.products);
+
+	const [searchParams] = useSearchParams();
+	const display = searchParams.get('display');
 
 	const params = useMemo((): PaginationParams => ({ limit: 0, skip: 0 }), []);
 	useEffect(() => {
@@ -33,13 +30,7 @@ export const Component: React.FC = () => {
 				<AsideLoader />
 			) : (
 				<Aside>
-					<TextField select label='Display' defaultValue='all' helperText='Please select your display type'>
-						{displayOptions.map((option) => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-						))}
-					</TextField>
+					<Filters />
 				</Aside>
 			)}
 			<div>
@@ -49,7 +40,8 @@ export const Component: React.FC = () => {
 					</div>
 				) : (
 					<InfiniteList
-						items={products!}
+						key={display}
+						items={display === 'all' ? products! : favorites}
 						limit={32}
 						className='products-grid'
 						render={(product) => (

@@ -8,34 +8,47 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import DeleteIcon from '@mui/icons-material/Delete';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { HeartRegularIcon, HeartSolidIcon, TrashIcon } from '../icons';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addFavorite, removeFavorite } from '@/store/products';
 
 export const ProductPreview: React.FC<Product> = (product) => {
+	const dispatch = useAppDispatch();
+	const { favorites } = useAppSelector((state) => state.products);
+	const isInFavorites = Boolean(favorites.find((p) => p.id === product.id));
+
+	const toggleFavorite = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		event.preventDefault();
+		if (!isInFavorites) {
+			handleAddFavorite();
+		} else {
+			handleRemoveFavorite();
+		}
+	};
+
+	const handleAddFavorite = () => {
+		dispatch(addFavorite(product));
+	};
+
+	const handleRemoveFavorite = () => {
+		dispatch(removeFavorite({ id: product.id }));
+	};
+
 	return (
 		<Card sx={{ maxWidth: 345 }} className='grid h-full'>
-			<CardHeader
-				action={
-					<IconButton aria-label='settings'>
-						<MoreVertIcon />
-					</IconButton>
-				}
-				title={product.title}
-				subheader={moment(product.meta.createdAt).format('LL')}
-			/>
+			<CardHeader title={product.title} subheader={moment(product.meta.createdAt).format('LL')} />
 			<CardMedia component='img' height='194' image={product.thumbnail} />
 			<CardContent>
 				<Typography variant='body2' sx={{ color: 'text.secondary' }} className='line-clamp-3'>
 					{product.description}
 				</Typography>
 			</CardContent>
-			<CardActions disableSpacing>
-				<IconButton aria-label='add to favorites'>
-					<FavoriteIcon />
+			<CardActions disableSpacing className='justify-end'>
+				<IconButton aria-label='add to favorites' onClick={toggleFavorite}>
+					{isInFavorites ? <HeartSolidIcon /> : <HeartRegularIcon />}
 				</IconButton>
 				<IconButton aria-label='delete'>
-					<DeleteIcon />
+					<TrashIcon />
 				</IconButton>
 			</CardActions>
 		</Card>

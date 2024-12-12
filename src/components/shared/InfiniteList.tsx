@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Spinner } from '../ui/Spinner';
 
@@ -39,6 +39,17 @@ export const InfiniteList = <T extends { id: number }>({
 			nextRender();
 		}
 	}, [inView]);
+
+	useLayoutEffect(() => {
+		const newRenderedItems = renderedItems.filter((item) => items.find((i) => i.id === item.id));
+		if (newRenderedItems.length !== renderedItems.length) {
+			setRenderedItems(newRenderedItems);
+
+			if (skip > total) {
+				setSkip(total);
+			}
+		}
+	}, [items]);
 
 	return (
 		<>

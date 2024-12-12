@@ -8,4 +8,5 @@ interface CreatingParams {
 export type InitialState = LoadingParams &
 	CreatingParams & {
 		products: Product[] | null;
+		favorites: Product[];
 	};
