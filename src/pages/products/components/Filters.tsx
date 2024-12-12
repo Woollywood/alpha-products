@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { useSearchParams } from 'react-router';
+import { getExistingSearchParams } from '@/utils';
 
 const displayOptions: { label: string; value: string }[] = [
 	{ label: 'All', value: 'all' },
@@ -15,7 +16,7 @@ export const Filters: React.FC = () => {
 
 	useEffect(() => {
 		if (display.length === 0) {
-			setSearchParams({ display: 'all' });
+			setSearchParams({ ...getExistingSearchParams(searchParams), display: 'all' });
 		}
 	}, []);
 
@@ -25,7 +26,7 @@ export const Filters: React.FC = () => {
 			label='Display'
 			helperText='Please select your display type'
 			value={display}
-			onChange={(e) => setSearchParams({ display: e.target.value })}>
+			onChange={(e) => setSearchParams({ ...getExistingSearchParams(searchParams), display: e.target.value })}>
 			{displayOptions.map((option) => (
 				<MenuItem key={option.value} value={option.value}>
 					{option.label}

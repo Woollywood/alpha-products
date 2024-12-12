@@ -12,3 +12,15 @@ export const delay = async (timeout: number) => {
 		}, timeout);
 	});
 };
+
+export const getExistingSearchParams = (searchParams: URLSearchParams) => {
+	const keys = [...searchParams.keys()];
+	return keys.reduce((acc, key) => ({ ...acc, [key]: searchParams.get(key) }), {});
+};
+
+export const convertSearchParamsToStr = (searchParams: Record<string, string>, exclude?: string[]) => {
+	return Object.entries(searchParams)
+		.filter(([key]) => !(exclude && exclude.includes(key)))
+		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+		.join('&');
+};

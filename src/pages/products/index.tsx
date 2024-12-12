@@ -1,31 +1,29 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import { Link, useSearchParams } from 'react-router';
-import { PaginationParams } from '@/api/types';
 import { GridLoader } from './components/GridLoader';
 import { AsideLoader } from './components/AsideLoader';
-import { useAppDispatch, useAppSelector } from '@/store';
+import { useAppSelector } from '@/store';
 import { ProductPreview } from '@/components/ui/products/ProductPreview';
-import { getProducts } from '@/store/products';
 import { Aside } from '@/components/ui/Aside';
 import { InfiniteList } from '@/components/shared/InfiniteList';
 import { Filters } from './components/Filters';
+import { Product } from '@/api/ProductsApi';
+import { useGetProducts } from '@/hooks/products';
 
 export const Component: React.FC = () => {
-	const dispatch = useAppDispatch();
 	const { isLoading, products, favorites } = useAppSelector((state) => state.products);
 
 	const [searchParams] = useSearchParams();
 	const display = searchParams.get('display');
+	const search = searchParams.get('s') || '';
 
-	const params = useMemo((): PaginationParams => ({ limit: 0, skip: 0 }), []);
-	useEffect(() => {
-		if (!products) {
-			dispatch(getProducts());
-		}
-	}, [dispatch, params, products]);
+	const filter = (product: Product) => product.title.toLowerCase().includes(search?.toLowerCase());
+	const filteredProducts = (display === 'all' ? products?.filter(filter) : favorites.filter(filter)) || [];
+
+	useGetProducts();
 
 	return (
-		<div className='grid grid-cols-[280px_1fr] gap-6'>
+		<div className='grid grid-cols-[17.5rem_1fr] gap-6'>
 			{isLoading ? (
 				<AsideLoader />
 			) : (
@@ -41,7 +39,7 @@ export const Component: React.FC = () => {
 				) : (
 					<InfiniteList
 						key={display}
-						items={display === 'all' ? products! : favorites}
+						items={filteredProducts}
 						limit={32}
 						className='products-grid'
 						render={(product) => (

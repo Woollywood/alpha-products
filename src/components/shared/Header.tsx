@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,7 +13,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Link } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
+import { convertSearchParamsToStr, getExistingSearchParams } from '@/utils';
 
 const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
@@ -61,6 +62,10 @@ const pages: { label: string; to: string }[] = [
 ];
 
 export const Header: React.FC = () => {
+	const [searchParams] = useSearchParams();
+	const searchTerm = searchParams.get('s') || '';
+	const [searchText, setSearchText] = useState(searchTerm);
+
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
 	const isMenuOpen = Boolean(anchorEl);
@@ -94,6 +99,19 @@ export const Header: React.FC = () => {
 		</Menu>
 	);
 
+	const navigate = useNavigate();
+	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		if (event.code === 'Enter') {
+			const otherParams = convertSearchParamsToStr(getExistingSearchParams(searchParams), ['s']);
+			const otherStr = otherParams.length > 0 ? `&${otherParams}` : '';
+
+			navigate({
+				pathname: '/products',
+				search: `?s=${searchText}${otherStr}`,
+			});
+		}
+	};
+
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position='fixed' className='h-[var(--header-height)]'>
@@ -107,7 +125,13 @@ export const Header: React.FC = () => {
 						<SearchIconWrapper>
 							<SearchIcon />
 						</SearchIconWrapper>
-						<StyledInputBase placeholder='Search…' inputProps={{ 'aria-label': 'search' }} />
+						<StyledInputBase
+							placeholder='Search…'
+							inputProps={{ 'aria-label': 'search' }}
+							value={searchText}
+							onChange={(e) => setSearchText(e.target.value)}
+							onKeyDown={handleKeyDown}
+						/>
 					</Search>
 					<Box sx={{ flexGrow: 1 }} />
 					{pages.map(({ label, to }) => (
