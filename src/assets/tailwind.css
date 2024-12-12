@@ -33,3 +33,7 @@
 		transform: rotate(360deg);
 	}
 }
+
+.products-grid {
+	@apply grid grid-cols-4 gap-8;
+}
