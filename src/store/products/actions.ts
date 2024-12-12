@@ -5,14 +5,6 @@ export const getProducts = createAsyncThunk('@@products/get', async () => {
 	return await ProductsApi.getProducts();
 });
 
-export const nextProducts = createAsyncThunk('@@products/next', async () => {
-	return await new Promise<void>((resolve) => {
-		setTimeout(() => {
-			resolve();
-		}, 1000);
-	});
-});
-
 export const addProduct = createAsyncThunk('@@product/create', async (params: Omit<Product, 'id' | 'reviews'>) => {
 	await new Promise<void>((resolve) => {
 		setTimeout(() => {
