@@ -9,7 +9,7 @@ export const nextProducts = createAsyncThunk('@@products/next', async () => {
 	return await new Promise<void>((resolve) => {
 		setTimeout(() => {
 			resolve();
-		}, 10);
+		}, 1000);
 	});
 });
 

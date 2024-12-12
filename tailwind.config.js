@@ -3,6 +3,9 @@ export default {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
 		extend: {
+			colors: {
+				primary: 'rgb(var(--primary))',
+			},
 			container: {
 				center: true,
 				padding: '2rem',
